@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { GetUsers } from './application/GetUsers';
+import { container } from 'tsyringe';
 
 const router = Router();
-const getUsers = new GetUsers();
 
 router.get('/', (req, res) => {
+  const getUsers = container.resolve(GetUsers);
   const users = getUsers.execute();
   res.json(users);
 });

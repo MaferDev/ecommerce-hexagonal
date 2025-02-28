@@ -1,5 +1,11 @@
+import { injectable, inject } from 'tsyringe';
+import { IUserRepository } from '../domain/UserRepository';
+
+@injectable()
 export class GetUsers {
+  constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
+
   execute() {
-    return [{ id: 1, name: 'Juan Pérez' }];
+    return this.userRepository.getAllUsers();
   }
 }
