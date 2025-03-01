@@ -1,3 +1,7 @@
+import { CreateUserDTO } from './user.dto';
+import { User } from './user.entity';
+
 export interface IUserRepository {
-  getAllUsers(): { id: number; name: string }[];
+  getAll(): Promise<User[]>;
+  create(user: CreateUserDTO): Promise<User>;
 }
