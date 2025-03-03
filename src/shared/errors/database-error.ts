@@ -1,4 +1,4 @@
-import { JSONType } from '../../custom-types';
+import { JSONType } from '../custom-types';
 import { CustomError, ErrorKind } from './custom-error';
 
 export class DatabaseException extends CustomError<typeof DatabaseException.CODE> {
@@ -8,7 +8,11 @@ export class DatabaseException extends CustomError<typeof DatabaseException.CODE
     super(DatabaseException.CODE, msg, metadata);
   }
 
-  static create(msg: string, operation: 'read' | 'update' | 'delete' | 'insert', record: string): DatabaseException {
+  static create(
+    msg: string,
+    operation: 'read' | 'update' | 'delete' | 'insert',
+    record: string,
+  ): DatabaseException {
     return new DatabaseException(msg, { operation, record });
   }
 

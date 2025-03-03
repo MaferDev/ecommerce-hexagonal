@@ -1,7 +1,9 @@
-import { Primitive } from '../../custom-types';
+import { Primitive } from '../custom-types';
 import { InvalidArgument } from '../errors';
 
-export abstract class ValueObject<T extends Primitive | Record<string, Primitive | ValueObject> = Primitive> {
+export abstract class ValueObject<
+  T extends Primitive | Record<string, Primitive | ValueObject> = Primitive,
+> {
   constructor(public readonly value: T) {
     this.ensureValueIsDefined(value);
   }

@@ -1,4 +1,4 @@
-import { JSONType } from '../../custom-types';
+import { JSONType } from '../custom-types';
 import { CustomError, ErrorKind } from './custom-error';
 
 export class ResourceNotFound extends CustomError<typeof ResourceNotFound.CODE> {

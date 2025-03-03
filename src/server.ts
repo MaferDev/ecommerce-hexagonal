@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import 'reflect-metadata';
 import setRouter from './config/routes';
 import { container } from 'tsyringe';
-import { UserRepository } from './slices/users/infraestructure/UserRepository';
+import { UserRepository } from './slices/users/infraestructure/repositories/mysql-users.repository';
 
 dotenv.config();
 
