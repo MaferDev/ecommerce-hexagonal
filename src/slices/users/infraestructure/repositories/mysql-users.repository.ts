@@ -7,7 +7,7 @@ import { ResourceNotFound } from '../../../../shared/errors';
 
 type userDb = UserPrimitives;
 @injectable()
-export class UserRepository implements IUserRepository {
+export class UserRepositoryMysql implements IUserRepository {
   private prisma = new PrismaClient();
 
   private async getRecordById(id: string): Promise<userDb> {
@@ -19,7 +19,11 @@ export class UserRepository implements IUserRepository {
     return dbRecord;
   }
   async getAll(): Promise<User[]> {
-    const usersDb: UserPrimitives[] = await this.prisma.user.findMany();
+    const usersDb: UserPrimitives[] = await this.prisma.user.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
     return usersDb.map((user) => User.fromPrimitives(user));
   }
 

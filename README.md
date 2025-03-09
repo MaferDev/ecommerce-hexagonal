@@ -36,3 +36,9 @@ El proyecto está organizado en los siguientes módulos:
    ```
 
 ## Uso
+
+### Prisma
+
+- Ejecuta npx prisma migrate dev --name nombre_migracion.
+- Para producción, usa npx prisma migrate deploy.
+- Sincroniza tipos con npx prisma generate.

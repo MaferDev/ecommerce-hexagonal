@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
     const { name, email, password } = req.body;
     const createUser = container.resolve(CreateUser);
     const user = await createUser.execute({ name, email, password });
-    res.status(201).json(user.toPrimitives());
+    res.status(201).json(user);
   } catch (error) {
     res.status(400).json(error);
   }

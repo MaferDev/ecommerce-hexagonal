@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 import { IUserRepository } from '../domain/user.repository';
 import bcrypt from 'bcryptjs';
 import { UseCase } from '../../../shared/use-case';
-import { User } from '../domain/user';
+import { User, UserPrimitives } from '../domain/user';
 import { UserEmail } from '../domain/value-objects/user-email';
 import { InvalidArgument } from '../../../shared/errors';
 
@@ -12,11 +12,13 @@ type Input = {
   password: string;
 };
 
+type Result = Omit<UserPrimitives, 'password'>;
+
 @injectable()
-export class CreateUser implements UseCase<Input, User> {
+export class CreateUser implements UseCase<Input, Result> {
   constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
 
-  async execute(params: Input): Promise<User> {
+  async execute(params: Input): Promise<Result> {
     const password = await bcrypt.hash(params.password, 10);
     const userExists = await this.userRepository.getByEmail(new UserEmail(params.email));
 
@@ -30,6 +32,9 @@ export class CreateUser implements UseCase<Input, User> {
     });
 
     await this.userRepository.create(user);
-    return user;
+
+    const { password: _, ...result } = user.toPrimitives();
+
+    return result;
   }
 }

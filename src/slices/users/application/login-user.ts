@@ -9,11 +9,14 @@ type Input = {
   email: string;
   password: string;
 };
+type Output = {
+  token: string;
+};
 @injectable()
-export class LoginUser implements UseCase<Input, string> {
+export class LoginUser implements UseCase<Input, Output> {
   constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
 
-  async execute(params: Input): Promise<string> {
+  async execute(params: Input): Promise<Output> {
     const { email, password } = params;
 
     const user = await this.userRepository.getByEmail(new UserEmail(email));
@@ -33,6 +36,6 @@ export class LoginUser implements UseCase<Input, string> {
       expiresIn: '1h',
     });
 
-    return token;
+    return { token };
   }
 }
