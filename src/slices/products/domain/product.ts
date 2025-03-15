@@ -4,6 +4,7 @@ import { Price } from './value-objects/price';
 import { ProductId } from './value-objects/product-id';
 import { ProductName } from './value-objects/product-name';
 import { ProductSlug } from './value-objects/product-slug';
+import { ProductStatus, ProductStatusEnum } from './value-objects/product-status';
 import { ProductStock } from './value-objects/product-stock';
 
 export type ProductPrimitives = ToPrimitives<Product>;
@@ -16,12 +17,13 @@ export class Product {
     public description: NonEmptyString,
     public stock: ProductStock,
     public slug: ProductSlug,
+    public status: ProductStatus,
     public createdAt: Date,
     public updatedAt: Date,
   ) {}
 
   static create(
-    params: Omit<ProductPrimitives, 'id' | 'createdAt' | 'updatedAt' | 'slug'>,
+    params: Omit<ProductPrimitives, 'id' | 'createdAt' | 'updatedAt' | 'slug' | 'status'>,
   ): Product {
     return new Product(
       ProductId.generateUnique(),
@@ -30,6 +32,7 @@ export class Product {
       new NonEmptyString(params.description),
       new ProductStock(params.stock),
       new ProductSlug(params.name),
+      new ProductStatus(ProductStatusEnum.ACTIVE),
       new Date(),
       new Date(),
     );
@@ -43,6 +46,7 @@ export class Product {
       new NonEmptyString(primitives.description),
       new ProductStock(primitives.stock),
       new ProductSlug(primitives.slug),
+      new ProductStatus(primitives.status),
       primitives.createdAt,
       primitives.updatedAt,
     );
@@ -60,6 +64,8 @@ export class Product {
 
     if (props.stock) this.stock = new ProductStock(props.stock);
 
+    if (props.status) this.status = new ProductStatus(props.status);
+
     this.updatedAt = new Date();
   }
 
@@ -71,6 +77,7 @@ export class Product {
       description: this.description.value,
       stock: this.stock.value,
       slug: this.slug.value,
+      status: this.status.value,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

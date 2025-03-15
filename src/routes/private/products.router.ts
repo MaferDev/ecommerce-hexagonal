@@ -1,20 +1,25 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
-import { GetProducts } from './application/get-products';
 import { authMiddleware } from '../../shared/middleware/authMiddleware';
-import { GetProductById } from './application/get-product-by-id';
-import { CreateProduct } from './application/create-product';
-import { UpdateProduct } from './application/update-product';
-import { DeleteProductById } from './application/delete-product-by-id';
+import { GetProductById } from '../../slices/products/application/get-product-by-id';
+import { CreateProduct } from '../../slices/products/application/create-product';
+import { UpdateProduct } from '../../slices/products/application/update-product';
+import { DeleteProductById } from '../../slices/products/application/delete-product-by-id';
+import { GetProducts } from '../../slices/products/application/get-products';
+import { SearchDTO } from '../../shared/dtos/search-pagination.dto';
 
 const router = Router();
 
-// Public  Router
 router.get('/list', authMiddleware, async (req, res) => {
   try {
+    const page = parseInt(req.query.page as string);
+    const perPage = parseInt(req.query.per_page as string);
+
+    const search: SearchDTO = { page, perPage };
+
     const getProducts = container.resolve(GetProducts);
-    const products = await getProducts.execute();
-    res.json(products.map((product) => product.toPrimitives()));
+    const products = await getProducts.execute(search);
+    res.json(products);
   } catch (error) {
     res.status(400).json(error);
   }

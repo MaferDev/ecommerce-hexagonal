@@ -1,39 +1,13 @@
 import { Router } from 'express';
-import { GetUsers } from './application/get-users';
 import { container } from 'tsyringe';
-import { CreateUser } from './application/create-user';
-import { LoginUser } from './application/login-user';
 import { authMiddleware } from '../../shared/middleware/authMiddleware';
-import { UpdateUser } from './application/update-user';
-import { GetUserById } from './application/get-user-by-id';
 import { CustomError } from '../../shared/errors';
+import { GetUsers } from '../../slices/users/application/get-users';
+import { GetUserById } from '../../slices/users/application/get-user-by-id';
+import { UpdateUser } from '../../slices/users/application/update-user';
 
 const router = Router();
 
-// Public routes
-router.post('/', async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const createUser = container.resolve(CreateUser);
-    const user = await createUser.execute({ name, email, password });
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-});
-
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const login = container.resolve(LoginUser);
-    const token = await login.execute({ email, password });
-    res.json(token);
-  } catch (error: any) {
-    res.status(401).json({ error: error.message });
-  }
-});
-
-// Private routes
 router.get('/list', authMiddleware, async (req, res) => {
   const getUsers = container.resolve(GetUsers);
   const users = await getUsers.execute();
